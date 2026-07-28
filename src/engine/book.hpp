@@ -1270,6 +1270,10 @@ class Book {
             @param bak_file             backup file name
         */
         inline void save_bin_edax(std::string file, int level, bool additional_calculation = true, bool *stop_saving = nullptr, int leaf_recalculation_level = ADD_LEAF_SPECIAL_LEVEL) {
+            if (!additional_calculation) {
+                save_bin_edax_without_additional_calculation(file, level, stop_saving);
+                return;
+            }
             if (additional_calculation) {
                 bool stop = false;
                 bool *stop_ptr = stop_saving ? stop_saving : &stop;
@@ -1648,11 +1652,171 @@ class Book {
         }
 
         inline void save_bin_edax_without_additional_calculation(std::string file, int level) {
-            save_bin_edax(file, level, false);
+            save_bin_edax_without_additional_calculation(file, level, nullptr);
         }
 
         inline void save_bin_edax_without_additional_calculation(std::string file, int level, bool *stop_saving) {
-            save_bin_edax(file, level, false, stop_saving);
+            std::unordered_set<Board, Book_hash> pass_boards;
+            Board root_board;
+            root_board.reset();
+            std::cerr << "pass board calculating..." << std::endl;
+            reset_seen();
+            get_pass_boards(root_board, pass_boards, true, nullptr, stop_saving);
+            reset_seen();
+            if (stop_saving && *stop_saving) {
+                return;
+            }
+            std::cerr << "pass board calculated " << pass_boards.size() << std::endl;
+            std::ofstream fout;
+            fout.open(file.c_str(), std::ios::out|std::ios::binary|std::ios::trunc);
+            if (!fout) {
+                std::cerr << "can't open " << file << std::endl;
+                return;
+            }
+            std::cerr << "saving book..." << std::endl;
+            char header[] = "XADEKOOB";
+            for (int i = 0; i < 8; ++i) {
+                fout.write((char*)&header[i], 1);
+            }
+            char ver = 4;
+            fout.write((char*)&ver, 1);
+            char rel = 4;
+            fout.write((char*)&rel, 1);
+            int year, month, day, hour, minute, second;
+            calc_date(&year, &month, &day, &hour, &minute, &second);
+            fout.write((char*)&year, 2);
+            fout.write((char*)&month, 1);
+            fout.write((char*)&day, 1);
+            fout.write((char*)&hour, 1);
+            fout.write((char*)&minute, 1);
+            fout.write((char*)&second, 1);
+            char dummy = 0;
+            fout.write((char*)&dummy, 1);
+            fout.write((char*)&level, 4);
+            int n_empties = HW2;
+            for (auto itr = book.begin(); itr != book.end(); ++itr) {
+                n_empties = std::min(n_empties, HW2 + 1 - itr->first.n_discs());
+            }
+            fout.write((char*)&n_empties, 4);
+            int err_mid = 0;
+            fout.write((char*)&err_mid, 4);
+            int err_end = 0;
+            fout.write((char*)&err_end, 4);
+            int verb = 0;
+            fout.write((char*)&verb, 4);
+            int n_position = (int)(book.size() + pass_boards.size());
+            fout.write((char*)&n_position, 4);
+            int n_win = 0, n_draw = 0, n_lose = 0;
+            uint32_t n_lines;
+            short short_val, short_val_min = -HW2, short_val_max = HW2;
+            char char_level = (char)level;
+            Book_elem book_elem;
+            char link_value, link_move;
+            char leaf_val, leaf_move;
+            char n_link;
+            Board b;
+            int percent = -1;
+            int n_boards = (int)book.size();
+            int t = 0;
+            for (Board pass_board: pass_boards) {
+                if (stop_saving && *stop_saving) {
+                    break;
+                }
+                Board passed_board = pass_board.copy();
+                passed_board.pass();
+                Book_elem passed_elem = get(passed_board);
+                n_lines = passed_elem.n_lines;
+                short_val = (short)passed_elem.value;
+                if (level == LEVEL_UNDEFINED) {
+                    Board b = pass_board.copy();
+                    b.pass();
+                    if (contain(b)) {
+                        char_level = get(b).level;
+                    } else {
+                        char_level = 1;
+                    }
+                }
+                if (char_level > 60) {
+                    char_level = 60;
+                }
+                n_link = 1;
+                link_value = (char)passed_elem.value;
+                link_move = MOVE_PASS;
+                leaf_val = SCORE_UNDEFINED;
+                leaf_move = MOVE_NOMOVE;
+                fout.write((char*)&pass_board.player, 8);
+                fout.write((char*)&pass_board.opponent, 8);
+                fout.write((char*)&n_win, 4);
+                fout.write((char*)&n_draw, 4);
+                fout.write((char*)&n_lose, 4);
+                fout.write((char*)&n_lines, 4);
+                fout.write((char*)&short_val, 2);
+                fout.write((char*)&short_val_min, 2);
+                fout.write((char*)&short_val_max, 2);
+                fout.write((char*)&n_link, 1);
+                fout.write((char*)&char_level, 1);
+                fout.write((char*)&link_value, 1);
+                fout.write((char*)&link_move, 1);
+                fout.write((char*)&leaf_val, 1);
+                fout.write((char*)&leaf_move, 1);
+            }
+            for (auto itr = book.begin(); itr != book.end(); ++itr) {
+                if (stop_saving && *stop_saving) {
+                    break;
+                }
+                book_elem = itr->second;
+                int n_percent = n_boards == 0 ? 100 : (double)t / n_boards * 100;
+                if (n_percent > percent) {
+                    percent = n_percent;
+                    std::cerr << "converting book " << percent << "%" << std::endl;
+                }
+                ++t;
+                short_val = book_elem.value;
+                //short_val_min = book_elem.value;
+                //short_val_max = book_elem.value;
+                b = itr->first;
+                std::vector<Book_value> links = get_all_moves_with_value(&b);
+                n_link = (char)links.size();
+                leaf_val = itr->second.leaf.value;
+                leaf_move = itr->second.leaf.move;
+                if (leaf_val < -HW2 || HW2 < leaf_val || leaf_move < 0 || HW2 <= leaf_move) {
+                    leaf_val = SCORE_UNDEFINED;
+                    leaf_move = MOVE_NOMOVE;
+                }
+                n_lines = itr->second.n_lines;
+                if (level == LEVEL_UNDEFINED) {
+                    char_level = itr->second.level;
+                }
+                if (char_level > 60) {
+                    char_level = 60;
+                }
+                fout.write((char*)&itr->first.player, 8);
+                fout.write((char*)&itr->first.opponent, 8);
+                fout.write((char*)&n_win, 4);
+                fout.write((char*)&n_draw, 4);
+                fout.write((char*)&n_lose, 4);
+                fout.write((char*)&n_lines, 4);
+                fout.write((char*)&short_val, 2);
+                fout.write((char*)&short_val_min, 2);
+                fout.write((char*)&short_val_max, 2);
+                fout.write((char*)&n_link, 1);
+                fout.write((char*)&char_level, 1);
+                for (Book_value &book_value: links) {
+                    link_value = (char)book_value.value;
+                    link_move = (char)book_value.policy;
+                    fout.write((char*)&link_value, 1);
+                    fout.write((char*)&link_move, 1);
+                }
+                fout.write((char*)&leaf_val, 1);
+                fout.write((char*)&leaf_move, 1);
+            }
+            fout.close();
+            if (stop_saving && *stop_saving) {
+                remove(file.c_str());
+                std::cerr << "book saving stopped" << std::endl;
+                return;
+            }
+            std::cerr << "saved " << t << " boards as a edax-formatted book " << n_position << " " << book.size() << std::endl;
         }
         /*
             @brief register a board to book
