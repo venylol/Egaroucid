@@ -130,3 +130,70 @@ function ShouldInstall_GENERIC: Boolean;
 begin
   Result := not IsProcessorFeaturePresent(40); {!AVX2}
 end;
+
+procedure AddMissingPath(var MissingPaths: string; Path: string);
+begin
+  if MissingPaths <> '' then
+    MissingPaths := MissingPaths + #13#10;
+  MissingPaths := MissingPaths + Path;
+end;
+
+procedure CheckInstalledFile(Path: string; var MissingPaths: string);
+begin
+  if not FileExists(Path) then
+    AddMissingPath(MissingPaths, Path);
+end;
+
+procedure CheckInstalledExe(FileName: string; ShouldInstall: Boolean; var MissingPaths: string);
+begin
+  if ShouldInstall then
+    CheckInstalledFile(ExpandConstant('{app}\' + FileName), MissingPaths);
+end;
+
+procedure CheckInstalledFiles;
+var
+  MissingPaths: string;
+begin
+  MissingPaths := '';
+
+  CheckInstalledExe('{#EGAROUCID_SIMD_EXE}', ShouldInstall_SIMD, MissingPaths);
+  CheckInstalledExe('{#EGAROUCID_SIMD_AMD_EXE}', ShouldInstall_SIMD_AMD, MissingPaths);
+  CheckInstalledExe('{#EGAROUCID_AVX512_EXE}', ShouldInstall_AVX512, MissingPaths);
+  CheckInstalledExe('{#EGAROUCID_AVX512_AMD_EXE}', ShouldInstall_AVX512_AMD, MissingPaths);
+  CheckInstalledExe('{#EGAROUCID_GENERIC_EXE}', ShouldInstall_GENERIC, MissingPaths);
+
+  CheckInstalledFile(ExpandConstant('{app}\LICENSE'), MissingPaths);
+  CheckInstalledFile(ExpandConstant('{app}\resources\eval.egev2'), MissingPaths);
+  CheckInstalledFile(ExpandConstant('{app}\resources\eval_move_ordering_end.egev'), MissingPaths);
+  CheckInstalledFile(ExpandConstant('{app}\resources\hash\hash25.eghs'), MissingPaths);
+  CheckInstalledFile(ExpandConstant('{app}\resources\hash\hash26.eghs'), MissingPaths);
+  CheckInstalledFile(ExpandConstant('{app}\resources\hash\hash27.eghs'), MissingPaths);
+  CheckInstalledFile(ExpandConstant('{app}\resources\img\icon.png'), MissingPaths);
+  CheckInstalledFile(ExpandConstant('{app}\resources\languages\languages.json'), MissingPaths);
+  CheckInstalledFile(ExpandConstant('{app}\resources\openings\japanese\openings.txt'), MissingPaths);
+  CheckInstalledFile(ExpandConstant('{app}\resources\xot\openingslarge.txt'), MissingPaths);
+
+  CheckInstalledFile(ExpandConstant('{userappdata}\Local\Egaroucid\version.txt'), MissingPaths);
+  CheckInstalledFile(ExpandConstant('{userappdata}\Local\Egaroucid\ai_settings\README.txt'), MissingPaths);
+  CheckInstalledFile(ExpandConstant('{userappdata}\Local\Egaroucid\display_settings\README.txt'), MissingPaths);
+
+  CheckInstalledFile(ExpandConstant('{userdocs}\Egaroucid\book.egbk3'), MissingPaths);
+  CheckInstalledFile(ExpandConstant('{userdocs}\Egaroucid\empty_book.egbk3'), MissingPaths);
+  CheckInstalledFile(ExpandConstant('{userdocs}\Egaroucid\games\summary.csv'), MissingPaths);
+  CheckInstalledFile(ExpandConstant('{userdocs}\Egaroucid\screenshots\README.txt'), MissingPaths);
+
+  if MissingPaths <> '' then
+  begin
+    MsgBox(
+      'Installation finished, but the following files were not found:' + #13#10 + #13#10 + MissingPaths,
+      mbError,
+      MB_OK);
+    Abort;
+  end;
+end;
+
+procedure CurStepChanged(CurStep: TSetupStep);
+begin
+  if CurStep = ssPostInstall then
+    CheckInstalledFiles;
+end;
