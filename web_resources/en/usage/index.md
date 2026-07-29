@@ -4,7 +4,7 @@
 
 This is the official documentation for the Othello AI Egaroucid. It briefly introduces how to use each feature. The content of this page is aligned with the latest version, but updates may not always be up to date.
 
-Last updated: 2026/05/17 Egaroucid 7.8.1
+Last updated: 2026/07/02 Egaroucid 7.8.2 / 7.8.3
 
 INSERT_TABLE_OF_CONTENTS_HERE
 
@@ -23,6 +23,8 @@ This section explains how to read the screen in five parts.
 <div class="centering_box">
     <img class="pic2" src="img/screen.png">
 </div>
+
+From version 7.8.2, Egaroucid automatically saves the window size and position when you close it, then restores them the next time it starts. If the saved position cannot be displayed on the current monitor, it starts at the conventional position.
 
 ### Board
 
@@ -370,12 +372,33 @@ Note that if both the <a href="#Settings_Make AI Lose Discs">Make AI Lose Discs<
 
 
 
+### AI Profile
+
+You can save various settings as profiles and switch between them later. This is useful when you want separate settings for different purposes, such as games, analysis, or streaming.
+
+When you switch profiles, the settings saved in that profile are loaded. If you frequently switch certain settings, it is convenient to keep them in separate profiles.
+
+When you change AI settings, an overwrite-save button for the profile appears. Pressing this button lets you easily overwrite the profile.
+
+From version 7.8.2, you can choose how AI profiles are automatically saved. If you choose "Overwrite Save," Egaroucid automatically saves the current settings to the current AI profile when it closes. If you choose "Save as New," the settings at the time of closing are saved as a new AI profile.
+
+<div class="centering_box">
+    <img class="pic2" src="img/setting_profile.png">
+    <img class="pic2" src="img/ai_profile_auto_save.png">
+    <img class="pic2" src="img/ai_profile_auto_save_rename.png">
+</div>
+
+
+
 ### Shortcut Key Settings
 
 Egaroucid has shortcut keys assigned to frequently used functions, and this setting allows you to freely add and change them. You can freely assign shortcut keys to almost all functions of Egaroucid. Functions that are not displayed can be seen by scrolling. You can scroll with the mouse wheel, as well as the up and down buttons and the Page Up and Page Down buttons.
 
+From version 7.8.2, a search box has been added, allowing you to filter shortcut setting items by function name. Since there are many items, it is useful to type part of the function name you want to set.
+
 <div class="centering_box">
     <img class="pic2" src="img/shortcut_key_settings.png">
+    <img class="pic2" src="img/shortcut_key_search.png">
 </div>
 
 If you want to delete (cancel) a shortcut key that has already been registered, press the delete button.
@@ -398,6 +421,12 @@ For functions with shortcut keys set, the shortcut key is displayed in parenthes
 
 <div class="centering_box">
     <img class="pic2" src="img/shortcut_key_settings_4.png">
+</div>
+
+From version 7.8.2, saved AI profiles can also be assigned to shortcut keys. If you often use a particular AI profile, you can load it directly with a key operation.
+
+<div class="centering_box">
+    <img class="pic2" src="img/ai_profile_shortcut_key.png">
 </div>
 
 Pressing the initial settings button allows you to batch change to the default shortcut key settings. The initial settings are as follows.
@@ -430,6 +459,9 @@ Pressing the initial settings button allows you to batch change to the default s
             <li><a href="#Operate_Make AI Play One Move">Make AI Play One Move</a> G (Go)</li>
             <li><a href="#Operate_Forward/Backward">Forward</a> →</li>
             <li><a href="#Operate_Forward/Backward">Backward</a> ←</li>
+            <li><a href="#Operate_Forward/Backward">Return to First Position</a> Home</li>
+            <li><a href="#Operate_Forward/Backward">Advance to Last Position</a> End</li>
+            <li><a href="#Operate_Return to Randomly Generated Position">Return to Randomly Generated Position</a> Shift+Home</li>
             <li><a href="#Operate_Undo">Undo</a> BackSpace</li>
             <li><a href="#Operate_Save This Branch">Save This Branch</a> Ctrl+L (Line)</li>
             <li><a href="#Operate_Generate Random Position">Generate Random Position</a> R (Random)</li>
@@ -455,18 +487,26 @@ In addition, as a basic operation, for all functions, buttons with nuances such 
 
 Six buttons have been placed in the space at the upper right of the screen. You can freely assign functions to these buttons. This is useful when there are functions you want to use without opening the menu, or when you want to quickly use functions whose shortcut keys are difficult to remember.
 
+AI profiles can also be assigned, so you can quickly switch AI settings for practice, analysis, and other purposes from the buttons in the upper right of the screen.
+
 <div class="centering_box">
     <img class="pic2" src="img/custom_buttons.png">
     <img class="pic2" src="img/custom_button_setting1.png">
     <img class="pic2" src="img/custom_button_setting2.png">
+    <img class="pic2" src="img/ai_profile_shortcut_button.png">
 </div>
 
 
 
-### Mouse Extra Button Settings
+### Mouse Additional Button Settings
 
 From version 7.8.1, it is now possible to assign shortcuts to mouse buttons as well as the keyboard. By using the side buttons of the mouse, you can perform operations such as moving forward/backward or having the AI play one move at hand.
 
+From version 7.8.2, AI profiles can also be assigned to mouse additional buttons.
+
+<div class="centering_box">
+    <img class="pic2" src="img/ai_profile_mouse_button.png">
+</div>
 
 
 
@@ -476,6 +516,17 @@ These are the functions that can be accessed from here in the menu.
 
 <div class="centering_box">
     <img class="pic2" src="img/display.png">
+</div>
+
+### Display Profile
+
+You can save display-related settings as profiles and switch between them later. This is useful when you want to separate the information shown on the board or graph by purpose, such as practice, streaming, or analysis.
+
+As with AI profiles, you can load profiles, save new profiles, edit names, and overwrite-save. You can also choose the automatic save method when Egaroucid closes: overwrite the current display profile or save the settings as a new display profile.
+
+<div class="centering_box">
+    <img class="pic2" src="img/display_profile.png">
+    <img class="pic2" src="img/display_profile_auto_save.png">
 </div>
 
 
@@ -659,8 +710,11 @@ The Umigame number display can be turned on and off with the shortcut key U.
 
 You can also set the depth to refer to the book when calculating the Umigame number. The default is 60 (refer as long as there is a book).
 
+From version 7.8.2, you can set cumulative disc loss and score range as conditions for calculating Umigame numbers. If cumulative disc loss is set to 0, it becomes the normal Umigame number that follows only the locally best move at each position. Egaroucid counts the number of lines whose disc loss is within the cumulative disc loss and whose board score range stays within the setting, then displays the extended Umigame number. The settings are automatically applied after changes.
+
 <div class="centering_box">
     <img class="pic2" src="img/umigame.png">
+    <img class="pic2" src="img/umigame_condition_settings.png">
 </div>
 
 
@@ -748,6 +802,20 @@ You can display the name of the opening that led to the current position in the 
 
 
 
+### Display in Information Area > Timer
+
+You can display the time used by Black and White after the start of the game.
+
+From version 7.8.2, you can manually start, pause, and reset the timer. On a human turn, the timer does not run until you press the start button. On an AI turn, if the timer has not yet been started even once, it starts automatically.
+
+You can set the time limit from "Display > Display in Information Area > Timer (minutes)." If you choose "N/A" at the left edge, there is no time limit. You can choose from 1 to 60 minutes in 1-minute increments. When a player reaches the time limit, that player's time display blinks.
+
+<div class="centering_box">
+    <img class="pic2" src="img/timer.png">
+</div>
+
+
+
 ### Display in Information Area > Best Line
 
 You can display the best line of play calculated by the AI in the information area. You can freely decide the length to display from 2 to 40 moves. Turning this setting on may increase the AI's calculation time.
@@ -802,15 +870,18 @@ The graph starts at 0 (the top) and gradually goes down. A place where the graph
 
 You can choose to show or hide the graph. If you hide it, the graph will be drawn with only light gray dots, as shown in the image. These dots are only at 0 and do not go up or down.
 
+From version 7.8.2, positions created while generating random positions or XOT positions are no longer shown as values on the normal game graph. This makes it easier to focus on games and analysis starting from the generated position itself. If you turn on the "Display Random Position Graph" checkbox, the graph for the positions generated along the way for XOT and other random positions will also be displayed.
+
 <div class="centering_box">
     <img class="pic2" src="img/graph_show.png">
+    <img class="pic2" src="img/xot_graph_marker_loss.png">
 </div>
 
 
 
 ### Display in Graph Area > Endgame Disc Loss
 
-Displays the disc loss for each player in the last 20 moves of the endgame. This feature was added in version 7.8.0.
+Displays the disc loss for each player over the last 20 moves of the endgame. You can choose 40 to 60 moves (default) or 41 to 60 moves as the endgame range.
 
 <div class="centering_box">
     <img class="pic2" src="img/endgame_loss.png">
@@ -870,9 +941,15 @@ You can have the AI play one move from the current position. G is assigned as a 
 
 You can go back and forth between positions. If you can't go back/forward any further, nothing will happen.
 
-In addition, as shortcut keys, you can simply press the right arrow key or the D key to advance the position. You can also press the left arrow key or the A key to go back.
+In addition, as shortcut keys, you can simply press the right arrow key or the D key to advance the position. You can also press the left arrow key or the A key to go back. Furthermore, the Home key returns to the first position, and the End key advances to the final board position.
 
 Furthermore, you can also go back and forth between positions by dragging the white vertical line displayed on the <a href="#How to Read the Screen_Graph">graph</a> to the left and right.
+
+
+
+### Return to Randomly Generated Position
+
+If you generate a random position with the <a href="#Operate_Generate Random Position">Generate Random Position</a> function and continue the game from there, you can return to the position immediately after random generation. The default shortcut key is Shift+Home.
 
 
 
@@ -907,7 +984,11 @@ Automatically generates a random mid-game position. I implemented it for the pur
 
 Pressing the generate button will automatically generate a mid-game position. By changing the number of generation moves, you can select what move number of the position to generate. You can also set the score range of the generated position. In the image below, it is set to generate a position in the range of +21 to +38 for White, that is, -38 to -21 for Black, after 18 moves have been played. However, since the board is generated so that it is roughly within the score range in the mid-game search, it cannot be guaranteed that the generated board will be strictly within the score range.
 
-Ctrl+R is assigned as a shortcut key for random position generation. From version 7.8.1, it is now possible to narrow the width of the score range down to a minimum of 2 discs.
+From version 7.8.1, it is now possible to narrow the width of the score range down to a minimum of 2 discs.
+
+From version 7.8.2, graphs created while generating random positions are hidden by default. If you turn on "Display > Display in Graph Area > Graph > Display Random Position Graph," the graph during random position generation will also be displayed.
+
+Ctrl+R is assigned as the default shortcut key for random position generation.
 
 <div class="centering_box">
     <img class="pic2" src="img/generate_random_board.png">
@@ -937,7 +1018,19 @@ A move is randomly selected from this $B$.
 
 Note that since there is no need to choose a strong move here, level 1 search is used. If a Book value is registered, that Book value is used; otherwise, the level-1 equivalent 2-ply evaluation value is used.
 
-For the last two moves up to the specified number of moves, if there is a move that falls within the specified score range, that move is chosen, and if not, a move close to the score range is chosen. This score-range adjustment uses the AI level set in <a href="#Settings_Level">Settings > Level</a>. The second-to-last move is searched at level 15, and the final move is searched at the configured AI level. However, if the configured AI level is below 15, the second-to-last move is also lowered to the configured AI level. The level 1 used for the earlier moves is also capped so that it does not exceed the configured AI level.
+From version 7.8.2, Egaroucid now makes a final check, using the configured AI level, to see whether the generated position is within the specified score range. For the last two moves up to the specified number of moves, if there is a move that falls within the specified score range, that move is chosen, and if not, a move close to the score range is chosen. This score-range adjustment uses the AI level set in <a href="#Settings_Level">Settings > Level</a>. The second-to-last move is searched at level 15, and the final move is searched at the configured AI level. However, if the configured AI level is below 15, the second-to-last move is also lowered to the configured AI level. The level 1 used for the earlier moves is also capped so that it does not exceed the configured AI level.
+
+
+
+### Generate XOT Position
+
+You can randomly generate an XOT starting position. It can be run from the menu "Operate > Generate XOT Position" and can also be assigned to shortcut keys, shortcut buttons, and mouse additional buttons.
+
+XOT is a set of starting positions created and published by Matthias Berg, and Egaroucid includes it with the author's permission. Use this when you want to start practice games or analysis from an XOT position instead of the normal initial position.
+
+<div class="centering_box">
+    <img class="pic2" src="img/xot_board_generation.png">
+</div>
 
 
 
@@ -963,9 +1056,15 @@ The black line is the line from h1 to a8 (the line where the black discs are lin
 
 
 
-### AI Operation > Stop Calculation
+### AI Operation > Stop/Resume Calculating
 
-If the AI's calculation does not finish, you can force it to stop by pressing this button.
+If the AI's calculation does not finish, pressing the "Stop Calculating" button pauses the calculation. While stopped, "Calculation Stopped" is displayed in the information area. Results that had already been calculated before stopping remain displayed.
+
+Pressing the "Resume Calculating" button resumes calculation. Hints, best lines, AI focus, Umigame numbers, Book accuracy, game analysis, AI move calculations, and other calculations interrupted while stopped are recalculated as needed after resuming.
+
+<div class="centering_box">
+    <img class="pic2" src="img/ai_calculation_stopped.png">
+</div>
 
 
 
@@ -986,6 +1085,19 @@ These are the functions that can be accessed from here in the menu.
 
 <div class="centering_box">
     <img class="pic2" src="img/in_out.png">
+</div>
+
+### Game Library
+
+You can manage saved games in a list. The Egaroucid/games folder in the Documents folder is viewed as a library inside Egaroucid.
+
+You can create folders, rename, move, copy, cut, paste, and delete. Multiple selection and drag and drop are also supported, so when you have many saved games, you can organize them into folders.
+
+In version 7.8.2, game library operations were reorganized to feel more like Explorer. You can deselect by clicking an empty area, select all with Ctrl+A, and copy, cut, and paste with Ctrl+C/Ctrl+X/Ctrl+V. Also, if you enable the recycle bin, deleted games are first moved to the recycle bin and can then be permanently deleted inside it.
+
+<div class="centering_box">
+    <img class="pic2" src="img/game_library_root.png">
+    <img class="pic2" src="img/game_library_recycle_bin.png">
 </div>
 
 
@@ -1031,14 +1143,32 @@ For example, you can also input the game record that can be copied in PlayOK: <c
 
 
 
+### Input > Input from Othello Quest
+
+You can search for and import public Othello Quest games by user name. Enter a user name, choose the game mode from 5 minutes, 1 minute, or XOT, and search.
+
+In the search results, you can check the game date and time, players, result, and other information. When you select and import a game, that game is reflected on the Egaroucid board. You can save the selected game from "Save to Game Library" by choosing a destination folder. The last searched user name and game mode are remembered.
+
+<div class="centering_box">
+    <img class="pic2" src="img/othello_quest_menu.png">
+    <img class="pic2" src="img/othello_quest_search.png">
+    <img class="pic2" src="img/othello_quest_results.png">
+    <img class="pic2" src="img/othello_quest_save_to_library.png">
+</div>
+
+
+
 ### Input > Edit Board
 
 You can manually set the state of the discs on the board. Select the "Color" checkbox on the center right of the screen and click on the board on the left to place the discs as you like. Finally, select the turn as black or white and press "Import" to reflect it. The turn is the same as the turn before editing by default.
 
 As shortcut keys, I have assigned the B key for black, the W key for white, and the E key for empty squares to change the color to be placed. You can also import with Enter and go back with Esc.
 
+From version 7.8.2, you can use the "Update following positions" option. When you go back to a position and edit the board, turning this option on before importing applies the edit not only to the current position but also to the following positions. This is useful when you want to correct an earlier input mistake from the middle of the game record.
+
 <div class="centering_box">
     <img class="pic2" src="img/edit_board.png">
+    <img class="pic2" src="img/edit_board_following_positions.png">
 </div>
 
 
@@ -1152,13 +1282,15 @@ The resolution of the image depends on the size of the Egaroucid screen. If you 
 
 ### Output > Save Game
 
-Saves the game in Egaroucid's original format. The final result and graph information are also automatically saved.
+Saves the game in Egaroucid's original format. The final result, graph information, and elapsed time since the start of the game are also automatically saved.
 
 Write the names and memos of the black and white players and save with the "Save Main Line" button. In addition, "Save up to Set Position" allows you to save information up to the position displayed in the <a href="#How to Read the Screen_Board">board area</a>. In other words, if you go back to a position and then save the game with this button, it will be saved up to the point where you went back.
 
 You can copy and paste with Ctrl+V. As shortcut keys, you can switch the input area with the Tab key and perform the "Back" operation with Esc. Cursor movement is supported from version 6.5.2. There is a limit of 10,000 characters for memo input.
 
 From version 7.7.0, you can now create folders arbitrarily. Select the save destination folder and press the "Save Here" button. You can move folders by double-clicking. You can also move folders and game information to any folder by drag and drop.
+
+From version 7.8.2, selecting a save destination and organizing games after saving are handled with the same mechanism as the <a href="#Input/Output_Game Library">Game Library</a>. Games imported from Othello Quest can also be saved to the same library.
 
 If you want to load a game, please check the list from <a href="#Input/Output_Input > Load Game">Load Game</a> and load it.
 
@@ -1291,7 +1423,7 @@ The corrected book is automatically saved when Egaroucid is closed.
 
 The default save location is Egaroucid/book.egbk3 in the Documents folder.
 
-Until version 7.7.0, there was a similar function for Edax-compliant Book modification, but this was abolished in 7.8.0. Instead, the behavior when loading an Edax format Book was changed so that the same process as Edax's Book Fix is performed with normal Book modification. However, perfect compatibility is not guaranteed.
+From version 7.8.2, "Fix Book (Edax-compliant)" has returned. Separate from the normal Fix Book, it fixes Book values while also treating Edax-format leaves as candidates. Use this when you place importance on exchanging Books with the Edax format. However, perfect compatibility is not guaranteed.
 
 
 
@@ -1350,12 +1482,19 @@ Please enter the path with the extension ```.egbk3``` for Egaroucid format and `
 
 Conversion to Edax format does not guarantee perfect compatibility. In addition, we are not responsible for any problems caused by conversion to Edax format.
 
+From version 7.8.2, a "Force Stop" button is displayed while exporting a Book. Even if you stop partway through, it exports through a temporary file so that the existing destination Book file is not corrupted. If you close the window during Book export, Egaroucid requests that export stop before exiting.
+
+When exporting in Edax format, you can choose "with additional calculation" or "without additional calculation." "With additional calculation" recalculates the leaves needed to make the Book valid as Edax format before exporting. "Without additional calculation" uses only the position information already present in the internal Egaroucid Book and converts it to Edax format without search or additional calculation.
+
+Also, if you choose Edax format with additional calculation, you can specify the leaf level. The leaf level is the AI level used when recalculating leaves that became necessary for Edax format.
+
 <div class="centering_box">
     <img class="pic2" src="img/book_export_1.png">
-    <img class="pic2" src="img/book_export_2.png">
+    <img class="pic2" src="img/book_export_edax_leaf_level.png">
     <img class="pic2" src="img/book_export_3.png">
 </div>
-In version 7.8.0, some of the processing when exporting an Edax format Book was changed.
+
+Since version 7.8.0, some of the processing when exporting an Edax format Book has changed.
 
 
 
@@ -1419,6 +1558,20 @@ Checks if a new version is available. If there is a new version, you can open th
 ### Automatic Update Check
 
 You can choose whether to automatically check for updates when Egaroucid is started. Egaroucid is developed with the highest possible compatibility with past versions, and various bugs are fixed in the latest version, so we always recommend updating to the latest version.
+
+
+
+### Data Migration
+
+This is a function for moving Egaroucid settings and saved data to another PC. "Export Data" creates a migration folder in the specified folder. The created folder name is in the format Egaroucid_Settings_date-and-time.
+
+With "Import Data," specify the exported Egaroucid_Settings_... folder and import it. Settings are overwritten, and data such as games and Books in the Documents folder are copied. Some data, such as Books, is reflected after restarting Egaroucid after importing.
+
+<div class="centering_box">
+    <img class="pic2" src="img/data_migration_menu.png">
+    <img class="pic2" src="img/data_migration_export.png">
+    <img class="pic2" src="img/data_migration_import.png">
+</div>
 
 
 
