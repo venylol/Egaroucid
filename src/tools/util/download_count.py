@@ -6,6 +6,9 @@ import matplotlib.pyplot as plt
 
 r = requests.get('https://api.github.com/repos/Nyanyan/Egaroucid/releases')
 
+GUI_TAG_PATTERN = re.compile(r'^v\d+\.\d+\.\d+$')
+CONSOLE_TAG_PATTERN = re.compile(r'^console_v\d+\.\d+\.\d+$')
+
 # GUI, Console
 name_arr = [[], []]
 published_arr = [[], []]
@@ -14,12 +17,20 @@ subtotal_arr = [[], []]
 GUI_IDX = 0
 CONSOLE_IDX = 1
 OTHERS_IDX = 2
-labels = ['GUI', 'Console', 'Others']
+labels = ['GUI', 'Console', 'Other releases']
 
 sum_download_counts = [0, 0, 0]
 for item in reversed(r.json()):
+    if CONSOLE_TAG_PATTERN.fullmatch(item["tag_name"]):
+        item_idx = CONSOLE_IDX
+    elif GUI_TAG_PATTERN.fullmatch(item["tag_name"]):
+        item_idx = GUI_IDX
+    else:
+        item_idx = OTHERS_IDX
+
     print("tag_name: ", item["tag_name"])
     print("name: ", item["name"])
+    print("category: ", labels[item_idx])
     print("published: ", item["published_at"])
     subtotal = 0
     for i in range(len(item["assets"])):
@@ -28,13 +39,6 @@ for item in reversed(r.json()):
     print('subtotal:', subtotal)
     print("")
     dt = datetime.strptime(item["published_at"], "%Y-%m-%dT%H:%M:%SZ").replace(tzinfo=timezone.utc)
-    item_idx = -1
-    if item["tag_name"][:9] == 'console_v':
-        item_idx = CONSOLE_IDX
-    elif item["tag_name"][0] == 'v':
-        item_idx = GUI_IDX
-    else:
-        item_idx = OTHERS_IDX
     if item_idx != OTHERS_IDX:
         name_arr[item_idx].append(item["name"])
         published_arr[item_idx].append(int(dt.timestamp()))
