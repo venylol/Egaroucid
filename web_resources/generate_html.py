@@ -24,6 +24,15 @@ CONSOLE_ALL_VERSION_IDENTIFIER = 'REPLACE_CONSOLE_ALL_VERSION_HERE'
 
 MAX_IMG_SIZE = 600
 
+GUI_TAG_PATTERN = re.compile(r'^v(\d+\.\d+\.\d+)$')
+CONSOLE_TAG_PATTERN = re.compile(r'^console_v(\d+\.\d+\.\d+)$')
+
+
+def get_tag_version(tag_name, tag_pattern):
+    match = tag_pattern.fullmatch(tag_name)
+    if not match:
+        return None
+    return version.parse(match.group(1))
 
 
 # GitHubのリリース情報を取得（全ページ）
@@ -57,14 +66,14 @@ console_tags = []
 gui_tags = []
 
 for tag_name in tag_to_date.keys():
-    if tag_name.startswith('console_v'):
+    if get_tag_version(tag_name, CONSOLE_TAG_PATTERN) is not None:
         console_tags.append(tag_name)
-    elif tag_name.startswith('v'):
+    elif get_tag_version(tag_name, GUI_TAG_PATTERN) is not None:
         gui_tags.append(tag_name)
 
 # バージョン順にソート
-console_tags.sort(key=lambda x: version.parse(x.replace('console_v', '')), reverse=True)
-gui_tags.sort(key=lambda x: version.parse(x.replace('v', '')), reverse=True)
+console_tags.sort(key=lambda x: get_tag_version(x, CONSOLE_TAG_PATTERN), reverse=True)
+gui_tags.sort(key=lambda x: get_tag_version(x, GUI_TAG_PATTERN), reverse=True)
 print(f"Console tags found: {len(console_tags)}")
 print(f"GUI tags found: {len(gui_tags)}")
 
