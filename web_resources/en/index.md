@@ -25,7 +25,7 @@ Completely free software. Egaroucid and Egaroucid for Console use the same (stro
     </tr>
     <tr>
         <td>[Egaroucid](./download/)</td>
-        <td>Windows</td>
+        <td>Windows 8 or later</td>
     </tr>
     <tr>
         <td>[Egaroucid for Console](./console/)</td>
@@ -36,6 +36,7 @@ Completely free software. Egaroucid and Egaroucid for Console use the same (stro
         <td>Any Web Browser</td>
     </tr>
     </table></div>
+
 
 
 

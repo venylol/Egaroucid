@@ -23,7 +23,7 @@ REPLACE_DOWNLOAD_BUTTON_HERE
     </tr>
     <tr>
         <td>[Egaroucid](./download/)</td>
-        <td>Windows</td>
+        <td>Windows8以上</td>
     </tr>
     <tr>
         <td>[Egaroucid for Console](./console/)</td>
